@@ -29,6 +29,30 @@ spec:
           value: "/auth/htpasswd"
         - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: "/var/lib/registry"
+          
+        - name: REGISTRY_NOTIFICATIONS_ENDPOINTS
+          value: '[{"name":"discord","url":"https://discord.com/api/webhooks/1371995044474781821/SJJKM85WNRp4FTELS25rNhLC3M2DaduMHNr6kebFC_ARAlh32Mtdhqhi3CnPBU1tq-85","headers":{"Content-Type":["application/json"]},"timeout":"1s","threshold":5,"backoff":1000}]'
+        - name: REGISTRY_NOTIFICATIONS_EVENTS
+          value: '{"enabled":{"push":true,"pull":true}}'
+          
+        - name: REGISTRY_STORAGE_DELETE_ENABLED
+          value: "true"
+          
+        - name: REGISTRY_STORAGE_CACHE_BLOBDESCRIPTOR
+          value: "inmemory"
+          
+        - name: REGISTRY_LOG_LEVEL
+          value: "info"
+        - name: REGISTRY_LOG_FORMATTER
+          value: "json"
+          
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_ENABLED
+          value: "true"
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_INTERVAL
+          value: "10s"
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_THRESHOLD
+          value: "3"
+          
         volumeMounts:
         - name: registry-auth
           mountPath: /auth
@@ -42,6 +66,27 @@ spec:
           limits:
             memory: 512Mi
             cpu: 200m
+        
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
       volumes:
       - name: registry-auth
         secret:
@@ -57,6 +102,9 @@ metadata:
   namespace: registry
   labels:
     app: registry
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "5000"
 spec:
   ports:
   - port: 5000
@@ -77,6 +125,8 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: "0"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-next-upstream-timeout: "600"
 spec:
   ingressClassName: nginx
   tls:
