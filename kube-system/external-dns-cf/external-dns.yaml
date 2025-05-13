@@ -231,6 +231,7 @@ txtSuffix:
 # -- Limit possible target zones by domain suffixes.
 domainFilters:
   - kevindev.com.br
+  - nojeira.com.br
 
 # -- Intentionally exclude domains from being managed.
 excludeDomains: []
