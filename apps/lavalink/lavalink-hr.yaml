@@ -16,7 +16,7 @@ spec:
         
         image:
           repository: "registry.kevindev.com.br/lavalink"
-          tag: "dev"
+          tag: "master"
           pullPolicy: Always
         
         imagePullSecrets:
