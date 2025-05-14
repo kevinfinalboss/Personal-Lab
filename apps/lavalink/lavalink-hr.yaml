@@ -33,24 +33,24 @@ spec:
         
         persistence:
           enabled: true
-          storageClass: ""
+          storageClass: "nfs-client"
           accessMode: ReadWriteOnce
           size: 5Gi
-          annotations: {}
-        
-        volumeMounts:
-          - name: lavalink-data
-            mountPath: /opt/lavalink/logs
-          - name: config-volume
-            mountPath: /opt/lavalink
         
         volumes:
-          - name: lavalink-data
-            persistentVolumeClaim:
-              claimName: lavalink-pvc
           - name: config-volume
             configMap:
               name: lavalink-config
+          - name: logs-volume
+            persistentVolumeClaim:
+              claimName: lavalink-pvc
+        
+        volumeMounts:
+          - name: config-volume
+            mountPath: /opt/lavalink/application.yml
+            subPath: application.yml
+          - name: logs-volume
+            mountPath: /opt/lavalink/logs
         
         resources:
           limits:
@@ -72,7 +72,7 @@ spec:
         
         externalSecrets:
           enabled: false
-        
+                  
   destination:
     server: https://kubernetes.default.svc 
     namespace: lavalink 
