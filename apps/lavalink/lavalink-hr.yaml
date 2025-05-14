@@ -53,7 +53,7 @@ spec:
             memory: 512Mi
         
         metrics:
-          enabled: true
+          enabled: false
           scrape: "true"
           port: "2333"
           path: "/metrics"

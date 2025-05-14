@@ -13,7 +13,7 @@ data:
     plugins:
     lavalink:
       server:
-        password: "youshallnotpass"
+        password: "testeconfigmap"
         sources:
           youtube: false
           bandcamp: true
