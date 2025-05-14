@@ -6,14 +6,24 @@ metadata:
 data:
   application.yml: |
     server:
-      port: 2333
+      port: 80
       address: 0.0.0.0
       http2:
         enabled: false
     plugins:
+      name: "youtube-plugin"
+
     lavalink:
+      plugins:
+        - dependency: "dev.lavalink.youtube:youtube-plugin:1.7.1"
+          snapshot: false
+      youtube:
+        enabled: true
+        allowSearch: true
+        allowDirectVideoIds: true
+        allowDirectPlaylistIds: true
       server:
-        password: "testeconfigmap"
+        password: "teste"
         sources:
           youtube: false
           bandcamp: true
@@ -46,19 +56,25 @@ data:
         youtubeSearchEnabled: true
         soundcloudSearchEnabled: true
         gc-warnings: true
+
     metrics:
       prometheus:
         enabled: false
-        endpoint: "/metrics"
+        endpoint: /metrics
+
     sentry:
       dsn: ""
       environment: ""
+    nother_key: another_value
+
     logging:
       file:
         path: ./logs/
+
       level:
         root: INFO
         lavalink: INFO
+
       request:
         enabled: true
         includeClientInfo: true
@@ -66,6 +82,7 @@ data:
         includeQueryString: true
         includePayload: true
         maxPayloadLength: 10000
+
       logback:
         rollingpolicy:
           max-file-size: 1GB
