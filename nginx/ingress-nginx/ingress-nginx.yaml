@@ -1,7 +1,6 @@
 ## nginx configuration
 ## Ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/index.md
 ##
-
 global:
   image:
     # -- Registry host to pull images from.
