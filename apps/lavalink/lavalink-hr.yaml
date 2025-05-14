@@ -34,14 +34,40 @@ spec:
         persistence:
           enabled: false
         
+        initContainers:
+          - name: config-init
+            image: busybox
+            command: 
+              - sh
+              - -c
+              - |
+                cp /configmap/application.yml /config/application.yml
+                sed -i "s|\${YOUTUBE_REFRESH_TOKEN}|$YOUTUBE_REFRESH_TOKEN|g" /config/application.yml
+                echo "===== Configuração do Lavalink Atualizada ====="
+                cat /config/application.yml | grep refreshToken
+                echo "=============================================="
+            env:
+              - name: YOUTUBE_REFRESH_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: lavalink-oauth-secret
+                    key: youtube-refresh-token
+            volumeMounts:
+              - name: config-volume
+                mountPath: /configmap
+              - name: config-dir
+                mountPath: /config
+        
         volumes:
           - name: config-volume
             configMap:
               name: lavalink-config
+          - name: config-dir
+            emptyDir: {}
         
         volumeMounts:
-          - name: config-volume
-            mountPath: /opt/lavalink/application.yml
+          - name: config-dir
+            mountPath: /opt/Lavalink/application.yml
             subPath: application.yml
         
         resources:
@@ -58,11 +84,25 @@ spec:
         env:
           - name: JAVA_OPTS
             value: "-Xmx512m -Xms256m -Dcom.sun.management.jmxremote=false"
-          - name: YOUTUBE_REFRESH_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: lavalink-oauth-secret
-                key: youtube-refresh-token
+        
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+          hosts:
+            - host: lavalink.kevindev.com.br
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - lavalink.kevindev.com.br
+              secretName: lavalink-tls-cert
                   
   destination:
     server: https://kubernetes.default.svc 
