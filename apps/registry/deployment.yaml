@@ -30,11 +30,6 @@ spec:
         - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
           value: "/var/lib/registry"
           
-        - name: REGISTRY_NOTIFICATIONS_ENDPOINTS
-          value: '[{"name":"discord","url":"https://discord.com/api/webhooks/1371995044474781821/SJJKM85WNRp4FTELS25rNhLC3M2DaduMHNr6kebFC_ARAlh32Mtdhqhi3CnPBU1tq-85","headers":{"Content-Type":["application/json"]},"timeout":"1s","threshold":5,"backoff":1000}]'
-        - name: REGISTRY_NOTIFICATIONS_EVENTS
-          value: '{"enabled":{"push":true,"pull":true}}'
-          
         - name: REGISTRY_STORAGE_DELETE_ENABLED
           value: "true"
           
