@@ -32,17 +32,25 @@ spec:
           enabled: false
         
         persistence:
-          enabled: false
+          enabled: true
+          storageClass: "nfs-client"
+          accessMode: ReadWriteOnce
+          size: 5Gi
         
         volumes:
           - name: config-volume
             configMap:
               name: lavalink-config
+          - name: logs-volume
+            persistentVolumeClaim:
+              claimName: lavalink-pvc
         
         volumeMounts:
           - name: config-volume
             mountPath: /opt/lavalink/application.yml
             subPath: application.yml
+          - name: logs-volume
+            mountPath: /opt/lavalink/logs
         
         resources:
           limits:
@@ -61,6 +69,25 @@ spec:
         env:
           - name: JAVA_OPTS
             value: "-Xmx512m -Xms256m"
+        
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
+            nginx.ingress.kubernetes.io/ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+            nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+          hosts:
+            - host: lavalink.kevindev.com.br
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - lavalink.kevindev.com.br
+              secretName: lavalink-tls-cert
                   
   destination:
     server: https://kubernetes.default.svc 
