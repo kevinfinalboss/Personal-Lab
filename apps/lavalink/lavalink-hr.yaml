@@ -41,7 +41,7 @@ spec:
         
         volumeMounts:
           - name: config-volume
-            mountPath: /opt/Lavalink/application.yml
+            mountPath: /opt/lavalink/application.yml
             subPath: application.yml
         
         resources:
@@ -54,32 +54,15 @@ spec:
         
         metrics:
           enabled: false
-          scrape: "true"
-          port: "2333"
-          path: "/metrics"
         
         env:
           - name: JAVA_OPTS
-            value: "-Xmx512m -Xms256m"
-        
-        ingress:
-          enabled: true
-          className: nginx
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod
-            nginx.ingress.kubernetes.io/ssl-redirect: "true"
-            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-            nginx.ingress.kubernetes.io/proxy-body-size: "0"
-            nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
-          hosts:
-            - host: lavalink.kevindev.com.br
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - lavalink.kevindev.com.br
-              secretName: lavalink-tls-cert
+            value: "-Xmx512m -Xms256m -Dcom.sun.management.jmxremote=false"
+          - name: YOUTUBE_REFRESH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: lavalink-oauth-secret
+                key: youtube-refresh-token
                   
   destination:
     server: https://kubernetes.default.svc 

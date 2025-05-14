@@ -23,7 +23,8 @@ data:
           - ANDROID_CREATOR
           - TVHTML5EMBEDDED
         oauth:
-          refreshToken: "COLE_SEU_REFRESH_TOKEN_AQUI_APOS_AUTENTICACAO"
+          enabled: true
+          refreshToken: "${YOUTUBE_REFRESH_TOKEN}"
     lavalink:
       server:
         password: "testeconfigmap"
@@ -60,7 +61,7 @@ data:
         soundcloudSearchEnabled: true
         gc-warnings: true
       plugins:
-        - dependency: "dev.lavalink.youtube:youtube-plugin:1.9.0"
+        - dependency: "dev.lavalink.youtube:youtube-plugin:1.13.2"
           snapshot: false
     metrics:
       prometheus:
@@ -88,4 +89,3 @@ data:
         rollingpolicy:
           max-file-size: 1GB
           max-history: 30
-
