@@ -10,8 +10,7 @@ spec:
     targetRevision: HEAD
     path: charts/app-templates/deployment
     helm:
-      valueFiles:
-        - values.yaml
+      releaseName: lavalink
       values: |
         replicaCount: 1
         
@@ -106,7 +105,7 @@ spec:
           enabled: true
           storageClass: ""
           accessMode: ReadWriteOnce
-          size: 1Gi
+          size: 5Gi
           annotations: {}
         
         volumeMounts:
@@ -129,12 +128,16 @@ spec:
         metrics:
           enabled: true
           scrape: "true"
-          port: 2333
+          port: "2333"
           path: "/metrics"
         
         env:
           - name: JAVA_OPTS
             value: "-Xmx512m -Xms256m"
+        
+        externalSecrets:
+          enabled: false
+        
   destination:
     server: https://kubernetes.default.svc 
     namespace: lavalink 
@@ -143,4 +146,4 @@ spec:
       prune: true 
       selfHeal: true 
     syncOptions:
-      - CreateNamespace=true 
+      - CreateNamespace=true
