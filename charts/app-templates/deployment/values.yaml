@@ -5,6 +5,9 @@ image:
   tag: "latest"
   pullPolicy: IfNotPresent
 
+imagePullSecrets:
+  - name: regcred
+
 nameOverride: ""
 fullnameOverride: ""
 
@@ -30,6 +33,13 @@ ingress:
         - path: /
           pathType: Prefix
   tls: []
+
+configMap:
+  enabled: false
+  name: ""
+  mountAsFile: false
+  mountPath: "/config"
+  data: {}
 
 persistence:
   enabled: false
@@ -57,3 +67,9 @@ externalSecrets:
   mountAsEnv: false
   mountAsFile: false
   parameters: []
+
+metrics:
+  enabled: true
+  scrape: "true"
+  port: 9090
+  path: "/metrics"
