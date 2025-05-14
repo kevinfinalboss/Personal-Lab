@@ -48,7 +48,7 @@ data:
         gc-warnings: true
     metrics:
       prometheus:
-        enabled: true
+        enabled: false
         endpoint: "/metrics"
     sentry:
       dsn: ""
