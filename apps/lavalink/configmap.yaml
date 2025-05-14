@@ -6,24 +6,27 @@ metadata:
 data:
   application.yml: |
     server:
-      port: 80
+      port: 2333
       address: 0.0.0.0
       http2:
         enabled: false
     plugins:
-      name: "youtube-plugin"
-
-    lavalink:
-      plugins:
-        - dependency: "dev.lavalink.youtube:youtube-plugin:1.9.0"
-          snapshot: false
       youtube:
         enabled: true
         allowSearch: true
         allowDirectVideoIds: true
         allowDirectPlaylistIds: true
+        clients:
+          - MUSIC
+          - WEB
+          - ANDROID_MUSIC
+          - ANDROID_CREATOR
+          - TVHTML5EMBEDDED
+        oauth:
+          refreshToken: "COLE_SEU_REFRESH_TOKEN_AQUI_APOS_AUTENTICACAO"
+    lavalink:
       server:
-        password: "teste"
+        password: "testeconfigmap"
         sources:
           youtube: false
           bandcamp: true
@@ -56,25 +59,24 @@ data:
         youtubeSearchEnabled: true
         soundcloudSearchEnabled: true
         gc-warnings: true
-
+      plugins:
+        - dependency: "dev.lavalink.youtube:youtube-plugin:1.9.0"
+          snapshot: false
     metrics:
       prometheus:
         enabled: false
-        endpoint: /metrics
-
+        endpoint: "/metrics"
     sentry:
       dsn: ""
       environment: ""
-    nother_key: another_value
-
     logging:
       file:
         path: ./logs/
-
       level:
         root: INFO
         lavalink: INFO
-
+        dev.lavalink.youtube.clients.Client: INFO
+        dev.lavalink.youtube.http.YoutubeOauth2Handler: INFO
       request:
         enabled: true
         includeClientInfo: true
@@ -82,8 +84,8 @@ data:
         includeQueryString: true
         includePayload: true
         maxPayloadLength: 10000
-
       logback:
         rollingpolicy:
           max-file-size: 1GB
           max-history: 30
+
