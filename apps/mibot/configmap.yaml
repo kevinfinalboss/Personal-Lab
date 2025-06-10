@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mibot-config
+  namespace: mibot
+data:
+  BOT_PREFIX: "mi!"
+  BOT_USE_SHARDING: "true"
+  BOT_SHARDS: "1"
+  OWNER_ID_1: "906552238619639878"
+  OWNER_ID_2: "123456789012345678"
+  LAVALINK_NODE_1_ID: "default"
+  LAVALINK_NODE_1_HOST: "lavalink.kevindev.com.br"
+  LAVALINK_NODE_1_PORT: "443"
+  LAVALINK_NODE_1_PASSWORD: "testeconfigmap"
+  LAVALINK_NODE_1_SECURE: "true"
+  LAVALINK_AUTO_PLAY: "false"
+  LAVALINK_DEFAULT_SEARCH_ENGINE: "youtube"
+  CF_ZONE_ID: "A"
+  PTERODACTYL_URL: "https://pterodactyl.kevindev.com.br"
+  DB_HOST: "31.97.16.148"
+  DB_PORT: "25503"
+  DB_USERNAME: "mibotuser"
+  DB_NAME: "mibotdiscord"
+  K8S_IN_CLUSTER: "true"

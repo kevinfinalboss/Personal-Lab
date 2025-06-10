@@ -1,0 +1,65 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mibot
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kevinfinalboss/Personal-Lab.git 
+    targetRevision: HEAD
+    path: charts/app-templates/deployment
+    helm:
+      releaseName: mibot
+      values: |
+        replicaCount: 1
+        
+        image:
+          repository: "registry.kevindev.com.br/mibot"
+          tag: "latest"
+          pullPolicy: Always
+        
+        imagePullSecrets:
+          - name: regcred
+        
+        containerPort: 3000
+        
+        service:
+          type: ClusterIP
+          port: 3000
+        
+        configMap:
+          enabled: false
+        
+        persistence:
+          enabled: false
+        
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        
+        metrics:
+          enabled: false
+        
+        envFrom:
+          - configMapRef:
+              name: mibot-config
+          - secretRef:
+              name: mibot-secrets
+        
+        ingress:
+          enabled: false
+                  
+  destination:
+    server: https://kubernetes.default.svc 
+    namespace: mibot 
+  syncPolicy:
+    automated:
+      prune: true 
+      selfHeal: true 
+    syncOptions:
+      - CreateNamespace=true
